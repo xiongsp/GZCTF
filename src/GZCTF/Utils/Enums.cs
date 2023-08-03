@@ -335,16 +335,17 @@ public static class ChallengeTypeExtensions
 public enum ChallengeTag : byte
 {
     Misc = 0,
-    Crypto = 1,
+    密码学 = 1,
     Pwn = 2,
     Web = 3,
-    Reverse = 4,
-    Blockchain = 5,
-    Forensics = 6,
-    Hardware = 7,
-    Mobile = 8,
-    PPC = 9,
-    SocialEngineering = 10,
+    逆向 = 4,
+    区块链 = 5,
+    取证 = 6,
+    硬件 = 7,
+    移动设备 = 8,
+    编程类 = 9,
+    社会工程学 = 10,
+    量子 = 11,
 }
 
 /// <summary>

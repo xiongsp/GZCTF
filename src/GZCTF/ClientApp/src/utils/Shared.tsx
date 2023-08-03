@@ -96,6 +96,10 @@ export const ChallengeTagLabelMap = new Map<ChallengeTag, ChallengeTagItemProps>
     ChallengeTag.SocialEngineering,
     { desrc: '社会工程学', icon: mdiHeadCogOutline, label: ChallengeTag.SocialEngineering, color: 'yellow' },
   ],
+  [
+    ChallengeTag.Quantum,
+    { desrc: '量子计算', icon: mdiHexagonSlice6, label: ChallengeTag.Quantum, color: 'teal' },
+  ],
 ])
 
 export interface ChallengeTagItemProps extends React.ComponentPropsWithoutRef<'div'> {

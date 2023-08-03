@@ -586,16 +586,17 @@ export interface ChallengeModel {
 /** 题目标签 */
 export enum ChallengeTag {
   Misc = 'Misc',
-  Crypto = 'Crypto',
+  Crypto = '密码学',
   Pwn = 'Pwn',
   Web = 'Web',
-  Reverse = 'Reverse',
-  Blockchain = 'Blockchain',
-  Forensics = 'Forensics',
-  Hardware = 'Hardware',
-  Mobile = 'Mobile',
-  PPC = 'PPC',
-  SocialEngineering = 'SocialEngineering',
+  Reverse = '逆向',
+  Blockchain = '区块链',
+  Forensics = '取证',
+  Hardware = '硬件',
+  Mobile = '移动设备',
+  PPC = '编程类',
+  SocialEngineering = '社会工程学',
+  Quantum = '量子',
 }
 
 /** 列表响应 */
