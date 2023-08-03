@@ -25,6 +25,9 @@ const About: FC = () => {
             <Text span className={classes.blink}>
               _
             </Text>
+          <Text className={classes.bio}>
+            <br/> Forked From <u>@GZTimeWalker</u>. Modified By <u>@xiongsp</u>.
+          </Text>
           </Text>
         </Center>
         <Group position="right">
@@ -63,7 +66,7 @@ const About: FC = () => {
                         weight={500}
                         sx={{ lineHeight: 1 }}
                       >
-                        @GZTimeWalker
+                        @xiongsp Forked From @GZTimeWalker
                       </Anchor>
                       <Badge
                         variant="gradient"

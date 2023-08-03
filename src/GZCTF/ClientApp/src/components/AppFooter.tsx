@@ -30,6 +30,17 @@ const AppFooter: FC = () => {
         @GZTimeWalker
       </Anchor>
       &nbsp;All&nbsp;Rights&nbsp;Reserved.
+      <br/>
+      &nbsp;Modified&nbsp;by&nbsp;<Anchor
+        href="https://github.com/xiongsp"
+        color="dimmed"
+        size="sm"
+        weight={500}
+        sx={{ lineHeight: 1 }}
+      >
+        @xiongsp
+      </Anchor>
+      .
     </Text>
   )
 
