@@ -3,6 +3,7 @@ using System.Net.Mime;
 using GZCTF.Middlewares;
 using GZCTF.Repositories.Interface;
 using GZCTF.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
@@ -19,16 +20,19 @@ public class AssetsController : ControllerBase
     private readonly ILogger<AssetsController> logger;
     private readonly IFileRepository fileRepository;
     private readonly IConfiguration configuration;
+    private readonly UserManager<UserInfo> userManager;
     private readonly string basepath;
     private readonly FileExtensionContentTypeProvider extProvider = new();
 
     public AssetsController(IFileRepository _fileeService,
         IConfiguration _configuration,
-        ILogger<AssetsController> _logger)
+        ILogger<AssetsController> _logger,
+        UserManager<UserInfo> _userinfo)
     {
         fileRepository = _fileeService;
         configuration = _configuration;
         logger = _logger;
+        userManager = _userinfo;
         basepath = configuration.GetSection("UploadFolder").Value ?? "uploads";
     }
 
@@ -59,7 +63,17 @@ public class AssetsController : ControllerBase
 
         if (!extProvider.TryGetContentType(filename, out string? contentType))
             contentType = MediaTypeNames.Application.Octet;
+        var user = userManager.GetUserAsync(HttpContext.User);
+        var result = user.Result;
+        var result_username = "<NULL>";
+        var result_realname = "<NULL>";
+        if (result is not null)
+        {
+            result_username = result.UserName;
+            result_realname = result.RealName;
+        }
 
+        logger.Log($"用户 [{result_username} {result_realname}] 请求了文件 [{hash[..8]}] {filename}", HttpContext.Connection?.RemoteIpAddress?.ToString() ?? "0.0.0.0", TaskStatus.Success, LogLevel.Information);
         return new PhysicalFileResult(path, contentType)
         {
             FileDownloadName = filename
