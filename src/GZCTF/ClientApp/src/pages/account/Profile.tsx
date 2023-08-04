@@ -193,6 +193,7 @@ const Profile: FC = () => {
           w="100%"
           value={profile.phone ?? ''}
           disabled={disabled}
+          required={true}
           onChange={(event) => setProfile({ ...profile, phone: event.target.value })}
         />
         <SimpleGrid cols={2}>
@@ -202,6 +203,7 @@ const Profile: FC = () => {
             w="100%"
             value={profile.stdNumber ?? ''}
             disabled={disabled}
+            required={true}
             onChange={(event) => setProfile({ ...profile, stdNumber: event.target.value })}
           />
           <TextInput
@@ -210,6 +212,7 @@ const Profile: FC = () => {
             w="100%"
             value={profile.realName ?? ''}
             disabled={disabled}
+            required={true}
             onChange={(event) => setProfile({ ...profile, realName: event.target.value })}
           />
         </SimpleGrid>

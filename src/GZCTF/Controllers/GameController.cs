@@ -153,6 +153,9 @@ public class GameController : ControllerBase
         if (team is null)
             return NotFound(new RequestResponse("队伍未找到", 404));
 
+        if (team.Members.All(u => u.RealName == "" || u.PhoneNumber == "" || u.StdNumber == ""))
+            return BadRequest(new RequestResponse("有队员的信息尚未完善"));
+
         if (team.Members.All(u => u.Id != user!.Id))
             return BadRequest(new RequestResponse("您不是此队伍的队员"));
 
