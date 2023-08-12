@@ -12,6 +12,7 @@ using GZCTF.Services;
 using GZCTF.Services.Interface;
 using GZCTF.Utils;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -186,6 +187,20 @@ builder.Services.Configure<GlobalConfig>(builder.Configuration.GetSection(nameof
 builder.Services.Configure<GamePolicy>(builder.Configuration.GetSection(nameof(GamePolicy)));
 builder.Services.Configure<ContainerProvider>(builder.Configuration.GetSection(nameof(ContainerProvider)));
 
+var forwardedOptions = builder.Configuration.GetSection(nameof(ForwardedOptions)).Get<ForwardedOptions>();
+if (forwardedOptions is null)
+{
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders =
+            ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    });
+}
+else
+{
+    builder.Services.Configure<ForwardedHeadersOptions>(forwardedOptions.ToForwardedHeadersOptions);
+}
+
 if (builder.Configuration.GetSection(nameof(ContainerProvider))
     .GetValue<ContainerProviderType>(nameof(ContainerProvider.Type))
     is ContainerProviderType.Kubernetes)
@@ -238,18 +253,6 @@ var app = builder.Build();
 
 Log.Logger = LogHelper.GetLogger(app.Configuration, app.Services);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseOpenApi(options => options.PostProcess += (document, _) => document.Servers.Clear());
-    app.UseSwaggerUi3();
-}
-else
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
-
 await app.RunPrelaunchWork();
 
 app.UseResponseCompression();
@@ -263,7 +266,19 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-app.UseMiddleware<ProxyMiddleware>();
+app.UseForwardedHeaders();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseOpenApi(options => options.PostProcess += (document, _) => document.Servers.Clear());
+    app.UseSwaggerUi3();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
 
 app.UseRouting();
 

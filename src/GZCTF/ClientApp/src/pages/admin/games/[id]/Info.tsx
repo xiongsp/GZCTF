@@ -80,8 +80,10 @@ const GameInfoEdit: FC = () => {
       setGame(gameSource)
       setStart(dayjs(gameSource.start))
       setEnd(dayjs(gameSource.end))
-      setWpddl(dayjs(gameSource.wpddl).diff(gameSource.end, 'h'))
       setOrganizations(gameSource.organizations || [])
+
+      const wpddl = dayjs(gameSource.wpddl).diff(gameSource.end, 'h')
+      setWpddl(wpddl < 0 ? 0 : wpddl)
     }
   }, [id, gameSource])
 
@@ -283,6 +285,7 @@ const GameInfoEdit: FC = () => {
               .hour(Number(newTime[0]))
               .minute(Number(newTime[1]))
               .second(Number(newTime[2]))
+              .millisecond(0)
             setStart(newDate)
             if (newDate && end < newDate) {
               setEnd(newDate.add(2, 'h'))
@@ -316,6 +319,7 @@ const GameInfoEdit: FC = () => {
               .hour(Number(newTime[0]))
               .minute(Number(newTime[1]))
               .second(Number(newTime[2]))
+              .millisecond(0)
             setEnd(newDate)
           }}
           error={end < start}
@@ -387,7 +391,7 @@ const GameInfoEdit: FC = () => {
             <Group spacing="sm">
               <Text size="sm">Writeup 附加说明</Text>
               <Text size="xs" c="dimmed">
-                支持 markdown 语法
+                支持 Markdown 语法
               </Text>
             </Group>
           }
@@ -437,7 +441,7 @@ const GameInfoEdit: FC = () => {
               <Group spacing="sm">
                 <Text size="sm">比赛详情</Text>
                 <Text size="xs" c="dimmed">
-                  支持 markdown 语法
+                  支持 Markdown 语法
                 </Text>
               </Group>
             }

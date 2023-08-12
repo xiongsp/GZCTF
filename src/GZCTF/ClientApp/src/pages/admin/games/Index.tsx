@@ -23,12 +23,13 @@ import {
   mdiPlus,
 } from '@mdi/js'
 import { Icon } from '@mdi/react'
-import { GameColorMap, getGameStatus } from '@Components/GameCard'
+import { GameColorMap } from '@Components/GameCard'
 import AdminPage from '@Components/admin/AdminPage'
 import GameCreateModal from '@Components/admin/GameCreateModal'
 import { showErrorNotification } from '@Utils/ApiErrorHandler'
 import { useTableStyles } from '@Utils/ThemeOverride'
 import { useArrayResponse } from '@Utils/useArrayResponse'
+import { getGameStatus } from '@Utils/useGame'
 import api, { GameInfoModel } from '@Api'
 
 const ITEM_COUNT_PER_PAGE = 30
@@ -93,9 +94,12 @@ const Games: FC = () => {
             <ActionIcon size="lg" disabled={page <= 1} onClick={() => setPage(page - 1)}>
               <Icon path={mdiArrowLeftBold} size={1} />
             </ActionIcon>
+            <Text fw="bold" size="sm">
+              {page}
+            </Text>
             <ActionIcon
               size="lg"
-              disabled={games && games.length < ITEM_COUNT_PER_PAGE}
+              disabled={page * ITEM_COUNT_PER_PAGE >= total}
               onClick={() => setPage(page + 1)}
             >
               <Icon path={mdiArrowRightBold} size={1} />
@@ -119,9 +123,7 @@ const Games: FC = () => {
             <tbody>
               {games &&
                 games.map((game) => {
-                  const startTime = dayjs(game.start)
-                  const endTime = dayjs(game.end)
-                  const status = getGameStatus(startTime, endTime)
+                  const { startTime, endTime, status } = getGameStatus(game)
                   const color = GameColorMap.get(status)
 
                   return (

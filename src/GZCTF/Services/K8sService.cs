@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using GZCTF.Models.Internal;
 using GZCTF.Services.Interface;
 using GZCTF.Utils;
@@ -46,8 +47,8 @@ public class K8sService : IContainerService
 
         if (withAuth)
         {
-            var padding = Codec.StrMD5($"{registry.UserName}@{registry.Password}@{registry.ServerAddress}");
-            AuthSecretName = $"{registry.UserName}-{padding}";
+            var padding = $"{registry.UserName}@{registry.Password}@{registry.ServerAddress}".StrMD5();
+            AuthSecretName = $"{registry.UserName}-{padding}".ToValidRFC1123String("secret");
         }
 
         try
@@ -73,14 +74,7 @@ public class K8sService : IContainerService
             return null;
         }
 
-        // add prefix when meet the leading numbers
-        // which is not allowed in k8s dns name
-        if (char.IsDigit(imageName[0]))
-            imageName = $"chal-{imageName}";
-
-        // follow the k8s naming convention
-        // use uuid to avoid name conflict
-        var name = $"{imageName}-{Guid.NewGuid().ToString("N")[..16]}".Replace('_', '-');
+        var name = $"{imageName.ToValidRFC1123String("chal")}-{Guid.NewGuid().ToString("N")[..16]}";
 
         var pod = new V1Pod("v1", "Pod")
         {
@@ -289,23 +283,22 @@ public class K8sService : IContainerService
             }, options.Namespace);
         }
 
-        if (withAuth && registry is not null)
+        if (withAuth && registry is not null && registry.ServerAddress is not null)
         {
-            // check if the UserName and Password
-            // will inject the json and make it invalid
-            foreach (var chr in $"{registry.UserName}{registry.Password}")
-            {
-                if (":@\"\\".Contains(chr))
-                {
-                    logger.SystemLog("Registry 用户名或密码中包含非法字符", TaskStatus.Failed, LogLevel.Error);
-                    throw new ArgumentException("Registry 用户名或密码中包含非法字符");
-                }
-            }
-
             var auth = Codec.Base64.Encode($"{registry.UserName}:{registry.Password}");
-            var dockerjson = $"{{\"auths\":{{\"{registry.ServerAddress}\":{{\"auth\":\"{auth}\"," +
-                $"\"username\":\"{registry.UserName}\",\"password\":\"{registry.Password}\"}}}}}}";
-            var dockerjsonBytes = Encoding.ASCII.GetBytes(dockerjson);
+            var dockerjsonObj = new
+            {
+                auths = new Dictionary<string, object> {
+                    {
+                        registry.ServerAddress, new {
+                            auth,
+                            username = registry.UserName,
+                            password = registry.Password
+                        }
+                    }
+                }
+            };
+            var dockerjsonBytes = JsonSerializer.SerializeToUtf8Bytes(dockerjsonObj);
             var secret = new V1Secret()
             {
                 Metadata = new V1ObjectMeta()

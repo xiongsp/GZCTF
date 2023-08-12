@@ -19,13 +19,13 @@ import {
 import { useLocalStorage } from '@mantine/hooks'
 import { mdiFileUploadOutline, mdiFlagOutline, mdiPuzzle } from '@mdi/js'
 import { Icon } from '@mdi/react'
+import ChallengeCard from '@Components/ChallengeCard'
+import ChallengeDetailModal from '@Components/ChallengeDetailModal'
+import Empty from '@Components/Empty'
+import WriteupSubmitModal from '@Components/WriteupSubmitModal'
 import { ChallengeTagLabelMap, SubmissionTypeIconMap } from '@Utils/Shared'
 import { useGame } from '@Utils/useGame'
 import api, { ChallengeInfo, ChallengeTag, SubmissionType } from '@Api'
-import ChallengeCard from './ChallengeCard'
-import ChallengeDetailModal from './ChallengeDetailModal'
-import Empty from './Empty'
-import WriteupSubmitModal from './WriteupSubmitModal'
 
 const DEFAULT_COLS = 8
 const GRID_BREAKPOINTS = [
@@ -34,7 +34,7 @@ const GRID_BREAKPOINTS = [
   { maxWidth: 2500, cols: 5 },
   { maxWidth: 2100, cols: 4 },
   { maxWidth: 1700, cols: 3 },
-  { maxWidth: 1300, cols: 2 },
+  { maxWidth: 1350, cols: 2 },
   { maxWidth: 900, cols: 1 },
 ]
 
