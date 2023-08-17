@@ -21,18 +21,17 @@ public class AssetsController : ControllerBase
     private readonly IFileRepository _fileRepository;
     private readonly FileExtensionContentTypeProvider _extProvider = new();
     private readonly UserManager<UserInfo> _userManager;
-    private readonly string basepath;
-    private readonly FileExtensionContentTypeProvider extProvider = new();
+    private readonly string _basepath;
 
-    public AssetsController(IFileRepository _fileeService,
-        IConfiguration _configuration,
-        ILogger<AssetsController> _logger,
-        UserManager<UserInfo> _userinfo)
+    public AssetsController(IFileRepository fileeService,
+        IConfiguration configuration,
+        ILogger<AssetsController> logger,
+        UserManager<UserInfo> userManager)
     {
-
         _fileRepository = fileeService;
         _logger = logger;
         _basepath = configuration.GetSection("UploadFolder").Value ?? "uploads";
+        _userManager = userManager;
     }
 
     /// <summary>
