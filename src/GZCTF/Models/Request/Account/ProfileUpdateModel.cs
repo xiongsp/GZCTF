@@ -25,7 +25,7 @@ public class ProfileUpdateModel
     /// 手机号
     /// </summary>
     //[Phone(ErrorMessage = "手机号格式错误")]
-    [RegularExpression(@"^1[3458][0-9]{9}$", ErrorMessage = "手机号格式应为11位中国大陆手机")]
+    [RegularExpression(@"^1[0-9]{10}$", ErrorMessage = "手机号格式应为11位中国大陆手机")]
     [Required(ErrorMessage = "手机号为必填项")]
     public string? Phone { get; set; }
 
