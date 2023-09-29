@@ -346,6 +346,7 @@ public enum ChallengeTag : byte
     编程类 = 9,
     社会工程学 = 10,
     量子 = 11,
+    渗透 = 12,
 }
 
 /// <summary>

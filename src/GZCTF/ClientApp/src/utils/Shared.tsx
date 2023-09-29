@@ -23,6 +23,7 @@ import {
   mdiPlus,
   mdiWeb,
   mdiHeadCogOutline,
+  mdiSecurityNetwork,
 } from '@mdi/js'
 import { Icon } from '@mdi/react'
 import {
@@ -99,6 +100,10 @@ export const ChallengeTagLabelMap = new Map<ChallengeTag, ChallengeTagItemProps>
   [
     ChallengeTag.Quantum,
     { desrc: '量子计算', icon: mdiHexagonSlice6, label: ChallengeTag.Quantum, color: 'teal' },
+  ],
+  [
+    ChallengeTag.Penetration,
+    { desrc: '渗透测试', icon: mdiSecurityNetwork, label: ChallengeTag.Penetration, color: 'indigo' },
   ],
 ])
 

@@ -597,6 +597,7 @@ export enum ChallengeTag {
   PPC = '编程类',
   SocialEngineering = '社会工程学',
   Quantum = '量子',
+  Penetration = '渗透',
 }
 
 /** 列表响应 */
